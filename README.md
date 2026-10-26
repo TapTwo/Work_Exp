@@ -1,4 +1,4 @@
-# Work_Exp — Network Security Automation Portfolio
+# Work_Exp - Network Security Automation Portfolio
 
 **Alexander Iglesias** · Zero Trust / SASE Network Security Engineer · Zscaler · Prisma Access · PAN-OS · Azure
 PCNSE · CCNP Enterprise · [LinkedIn](https://www.linkedin.com/in/alexander-i-9261867b/)
