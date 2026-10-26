@@ -1,0 +1,6 @@
+# One reviewer per device group; two for anything shared.
+# Replace handles with your team's.
+/fw-policy-as-code/shared/              @TapTwo
+/fw-policy-as-code/device-groups/       @TapTwo
+/fw-policy-as-code/exceptions/          @TapTwo
+/panos-automation/                      @TapTwo

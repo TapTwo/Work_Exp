@@ -1,0 +1,8 @@
+# Approved deviations from policy lint. An expired exception becomes a lint failure (and drift).
+exceptions:
+  - rule: dc-east-legacy-scanner
+    check: no-any-application
+    reason: vulnerability scanner needs any-app to a scoped destination
+    chg: CHG0011990
+    approver: security-architect
+    expires: "2027-03-31"

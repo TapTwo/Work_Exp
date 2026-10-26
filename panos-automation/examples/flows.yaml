@@ -1,0 +1,36 @@
+# Expected-flow test set for a change. Run with policy_match.py against a firewall.
+# Addresses are RFC 5737 documentation ranges.
+flows:
+  - name: app-x web tier from users
+    from: trust
+    to: dmz
+    src: 192.0.2.10
+    dst: 198.51.100.20
+    port: 443
+    app: ssl
+    expect: allow
+
+  - name: app-x to database
+    from: dmz
+    to: data
+    src: 198.51.100.20
+    dst: 203.0.113.40
+    port: 1433
+    app: mssql-db
+    expect: allow
+
+  - name: users must NOT reach database directly
+    from: trust
+    to: data
+    src: 192.0.2.10
+    dst: 203.0.113.40
+    port: 1433
+    expect: deny
+
+  - name: dmz must NOT initiate to users
+    from: dmz
+    to: trust
+    src: 198.51.100.20
+    dst: 192.0.2.10
+    port: 445
+    expect: deny

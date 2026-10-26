@@ -1,0 +1,23 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Service objects file",
+  "type": "object",
+  "required": ["services"],
+  "additionalProperties": false,
+  "properties": {
+    "services": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["name", "protocol", "port"],
+        "additionalProperties": false,
+        "properties": {
+          "name": { "type": "string", "pattern": "^SVC-(TCP|UDP)-[0-9,-]+$" },
+          "protocol": { "enum": ["tcp", "udp"] },
+          "port": { "type": "string", "pattern": "^[0-9]+(-[0-9]+)?(,[0-9]+(-[0-9]+)?)*$" },
+          "description": { "type": "string" }
+        }
+      }
+    }
+  }
+}

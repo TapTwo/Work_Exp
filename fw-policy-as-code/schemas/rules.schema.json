@@ -1,0 +1,38 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Security rules file",
+  "type": "object",
+  "required": ["rules"],
+  "additionalProperties": false,
+  "properties": {
+    "rules": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["name", "from", "to", "source", "destination", "application", "service", "action", "tags", "description"],
+        "additionalProperties": false,
+        "properties": {
+          "name": { "type": "string", "pattern": "^[a-z0-9-]+-[a-z0-9-]+$", "maxLength": 63 },
+          "from": { "$ref": "#/$defs/zones" },
+          "to": { "$ref": "#/$defs/zones" },
+          "source": { "$ref": "#/$defs/members" },
+          "destination": { "$ref": "#/$defs/members" },
+          "application": { "$ref": "#/$defs/members" },
+          "service": { "$ref": "#/$defs/members" },
+          "action": { "enum": ["allow", "deny", "drop", "reset-client", "reset-server", "reset-both"] },
+          "profile_group": { "type": "string" },
+          "log_start": { "type": "boolean" },
+          "log_end": { "type": "boolean" },
+          "disabled": { "type": "boolean" },
+          "tags": { "type": "array", "items": { "type": "string" }, "minItems": 1 },
+          "expires": { "type": "string", "format": "date", "pattern": "^\\d{4}-\\d{2}-\\d{2}$" },
+          "description": { "type": "string", "minLength": 1, "maxLength": 1024 }
+        }
+      }
+    }
+  },
+  "$defs": {
+    "zones": { "type": "array", "items": { "type": "string", "minLength": 1 }, "minItems": 1 },
+    "members": { "type": "array", "items": { "type": "string", "minLength": 1 }, "minItems": 1 }
+  }
+}

@@ -1,0 +1,57 @@
+<?xml version="1.0"?>
+<config version="11.1.0" urldb="paloaltonetworks">
+  <shared>
+    <address>
+      <entry name="H-198.51.100.20"><ip-netmask>198.51.100.20/32</ip-netmask><description>app-x web</description></entry>
+      <entry name="H-203.0.113.40"><ip-netmask>203.0.113.40/32</ip-netmask><description>app-x db</description></entry>
+      <entry name="N-192.0.2.0_24"><ip-netmask>192.0.2.0/24</ip-netmask><description>corp users</description></entry>
+    </address>
+    <service>
+      <entry name="SVC-TCP-1433"><protocol><tcp><port>1433</port></tcp></protocol></entry>
+    </service>
+    <tag>
+      <entry name="app-x"/>
+      <entry name="CHG0012345"/>
+    </tag>
+  </shared>
+  <devices>
+    <entry name="localhost.localdomain">
+      <device-group>
+        <entry name="dc-east">
+          <pre-rulebase>
+            <security>
+              <rules>
+                <entry name="dc-east-app-x-web" uuid="2b4e1c00-0000-4000-8000-000000000001">
+                  <from><member>trust</member></from>
+                  <to><member>dmz</member></to>
+                  <source><member>N-192.0.2.0_24</member></source>
+                  <destination><member>H-198.51.100.20</member></destination>
+                  <application><member>ssl</member></application>
+                  <service><member>application-default</member></service>
+                  <action>allow</action>
+                  <profile-setting><group><member>PG-standard</member></group></profile-setting>
+                  <log-end>yes</log-end>
+                  <tag><member>app-x</member><member>CHG0012345</member></tag>
+                  <description>CHG0012345 app-x web tier</description>
+                </entry>
+                <entry name="dc-east-app-x-db" uuid="2b4e1c00-0000-4000-8000-000000000002">
+                  <from><member>dmz</member></from>
+                  <to><member>data</member></to>
+                  <source><member>H-198.51.100.20</member></source>
+                  <destination><member>H-203.0.113.40</member></destination>
+                  <application><member>mssql-db</member></application>
+                  <service><member>SVC-TCP-1433</member></service>
+                  <action>allow</action>
+                  <profile-setting><group><member>PG-standard</member></group></profile-setting>
+                  <log-end>yes</log-end>
+                  <tag><member>app-x</member><member>CHG0012345</member></tag>
+                  <description>CHG0012345 app-x db tier</description>
+                </entry>
+              </rules>
+            </security>
+          </pre-rulebase>
+        </entry>
+      </device-group>
+    </entry>
+  </devices>
+</config>

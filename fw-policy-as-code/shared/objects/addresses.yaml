@@ -1,0 +1,28 @@
+# Shared address objects. Naming standard: H- host, N- network, R- range, F- FQDN.
+# Name is derived from value so duplicates are impossible by construction.
+addresses:
+  - name: N-192.0.2.0_24
+    value: 192.0.2.0/24
+    description: corporate user subnet
+    tags: [users]
+
+  - name: H-198.51.100.20
+    value: 198.51.100.20/32
+    description: app-x web tier
+    tags: [app-x]
+
+  - name: H-203.0.113.40
+    value: 203.0.113.40/32
+    description: app-x database
+    tags: [app-x]
+
+  - name: F-api.example.com
+    value: api.example.com
+    type: fqdn
+    description: partner API endpoint
+    tags: [partner]
+
+address_groups:
+  - name: AG-app-x-web
+    members: [H-198.51.100.20]
+    tags: [app-x]

@@ -1,0 +1,42 @@
+# Pre-rules for device group dc-east. Order in this file = order on the device.
+# Every rule carries the CHG that introduced it, an owner tag, and (if temporary) an expiry.
+rules:
+  - name: dc-east-app-x-web
+    from: [trust]
+    to: [dmz]
+    source: [N-192.0.2.0_24]
+    destination: [AG-app-x-web]
+    application: [ssl]
+    service: [application-default]
+    action: allow
+    profile_group: PG-standard
+    log_end: true
+    tags: [app-x, owner-appteam-x, CHG0012345]
+    description: CHG0012345 app-x web tier from corporate users
+
+  - name: dc-east-app-x-db
+    from: [dmz]
+    to: [data]
+    source: [AG-app-x-web]
+    destination: [H-203.0.113.40]
+    application: [mssql-db]
+    service: [SVC-TCP-1433]
+    action: allow
+    profile_group: PG-standard
+    log_end: true
+    tags: [app-x, owner-appteam-x, CHG0012345]
+    description: CHG0012345 app-x web to database
+
+  - name: dc-east-partner-api-temp
+    from: [dmz]
+    to: [untrust]
+    source: [AG-app-x-web]
+    destination: [F-api.example.com]
+    application: [ssl]
+    service: [application-default]
+    action: allow
+    profile_group: PG-standard
+    log_end: true
+    tags: [app-x, owner-appteam-x, CHG0012351, temporary]
+    expires: "2026-12-31"
+    description: CHG0012351 partner API during migration, remove after cutover

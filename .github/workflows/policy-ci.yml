@@ -1,0 +1,57 @@
+name: firewall policy CI
+
+on:
+  pull_request:
+    paths:
+      - "fw-policy-as-code/**"
+      - "panos-automation/**"
+  push:
+    branches: [main]
+    paths:
+      - "fw-policy-as-code/**"
+      - "panos-automation/**"
+
+jobs:
+  validate:
+    name: lint + render + drift-tool self-test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install
+        run: pip install -r panos-automation/requirements.txt
+
+      - name: Static policy checks (schema, naming, references, any/any, logging, CHG tag, expiry)
+        working-directory: fw-policy-as-code
+        run: python tools/lint.py
+
+      - name: Render intent to PAN-OS set commands
+        working-directory: fw-policy-as-code
+        run: |
+          mkdir -p build
+          python tools/render.py > build/panorama.set
+          wc -l build/panorama.set
+
+      - name: Upload rendered config (reviewers read this diff, not the YAML)
+        uses: actions/upload-artifact@v4
+        with:
+          name: rendered-panorama-set
+          path: fw-policy-as-code/build/panorama.set
+
+      - name: Drift tool self-test (must detect the 4 seeded differences)
+        working-directory: panos-automation
+        run: |
+          python config_diff.py examples/intended.xml examples/running-with-drift.xml --json > drift.json || true
+          python - <<'EOF'
+          import json
+          d = json.load(open("drift.json"))
+          assert d["drift_count"] == 4, d
+          print("drift self-test OK:", d["drift_count"], "differences")
+          EOF
+
+      - name: Byte-compile all scripts
+        run: python -m compileall -q panos-automation fw-policy-as-code/tools zscaler-ztna-toolkit

@@ -1,0 +1,27 @@
+# Secrets — never commit
+.env
+*.env
+*.key
+*.pem
+*.p12
+creds.*
+secrets.yaml
+api_keys.*
+
+# Exported firewall configs (may contain real data)
+exports/
+*.running.xml
+*.candidate.xml
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+.pytest_cache/
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/

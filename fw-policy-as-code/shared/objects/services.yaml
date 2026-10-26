@@ -1,0 +1,10 @@
+services:
+  - name: SVC-TCP-1433
+    protocol: tcp
+    port: "1433"
+    description: MS SQL
+
+  - name: SVC-TCP-8443
+    protocol: tcp
+    port: "8443"
+    description: app-x admin console
